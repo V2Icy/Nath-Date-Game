@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>A Little Game For Nath ❤️</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#ff9ec4,#ffd5e5,#ffeaf3);
+}
+
+.screen{
+display:none;
+width:100%;
+height:100%;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+padding:25px;
+position:absolute;
+}
+
+.screen.active{
+display:flex;
+animation:fade .5s ease;
+}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.card{
+background:white;
+padding:35px;
+border-radius:25px;
+box-shadow:0 15px 35px rgba(0,0,0,.15);
+max-width:420px;
+width:90%;
+}
+
+h1{
+font-size:2.4rem;
+margin-bottom:15px;
+color:#ff4f8b;
+}
+
+h2{
+margin-bottom:18px;
+color:#444;
+}
+
+p{
+color:#666;
+line-height:1.5;
+}
+
+button{
+padding:14px 30px;
+font-size:18px;
+border:none;
+border-radius:15px;
+cursor:pointer;
+margin:8px;
+transition:.25s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+#yesBtn{
+background:#ff4f8b;
+color:white;
+}
+
+#yesBtn:hover{
+background:#ff2e72;
+}
+
+#noBtn{
+background:#efefef;
+color:#333;
+}
+
+#nextBtn,
+#calendarNext,
+#finish{
+background:#ff4f8b;
+color:white;
+}
+
+input{
+padding:15px;
+font-size:18px;
+border-radius:12px;
+border:2px solid #ff8db6;
+outline:none;
+width:250px;
+text-align:center;
+}
+
+#playArea{
+position:relative;
+width:100%;
+height:70vh;
+margin-top:25px;
+}
+
+.heart{
+position:absolute;
+font-size:34px;
+cursor:pointer;
+user-select:none;
+transition:.2s;
+animation:float 1.5s infinite ease-in-out;
+}
+
+.heart:hover{
+transform:scale(1.25);
+}
+
+@keyframes float{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-10px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+#score{
+font-size:24px;
+font-weight:600;
+margin-top:10px;
+color:#ff4f8b;
+}
+
+#hearts{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+overflow:hidden;
+z-index:-1;
+}
+
+.bgHeart{
+position:absolute;
+color:#ff7aa8;
+opacity:.25;
+animation:bgFloat linear infinite;
+}
+
+@keyframes bgFloat{
+
+0%{
+transform:translateY(100vh) rotate(0deg);
+}
+
+100%{
+transform:translateY(-120vh) rotate(360deg);
+}
+
+}
+
+@media(max-width:600px){
+
+.card{
+padding:25px;
+}
+
+button{
+width:90%;
+font-size:17px;
+}
+
+input{
+width:90%;
+}
+
+h1{
+font-size:2rem;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="hearts"></div>
+
+<div class="screen active" id="game">
+
+<h1>❤️</h1>
+
+<h2>Nath, collect 10 hearts! 🎀</h2>
+
+<p id="score">0 / 10</p>
+
+<div id="playArea"></div>
+
+</div>
+
+
+<div class="screen" id="question">
+
+<div class="card">
+
+<h2>You did it, Nath! ❤️</h2>
+
+<h1>One last question...</h1>
+
+<h2>Would you go on a date with me? 🥺❤️</h2>
+
+<div class="buttons">
+
+<button id="yesBtn">
+YES ❤️
+</button>
+
+<button id="noBtn">
+No 🙁
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="screen" id="yay">
+
+<div class="card">
+
+<h1>🎀❤️</h1>
+
+<h2>NATH SAID YESSSS 🎉</h2>
+
+<p>
+You literally just made my day. ❤️
+</p>
+
+<button id="nextBtn">
+
+Next ➜
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="screen" id="calendar">
+
+<div class="card">
+
+<h2>
+When are you free, Nath? ❤️
+</h2>
+
+<input
+type="date"
+id="datePicker"
+>
+
+<br><br>
+
+<button id="calendarNext">
+
+Next ➜
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="screen" id="time">
+
+<div class="card">
+
+<h2>
+What time works best? 😊
+</h2>
+
+<input
+type="time"
+id="timePicker"
+>
+
+<br><br>
+
+<button id="finish">
+
+Finish ❤️
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="screen" id="final">
+
+<div class="card">
+
+<h1>
+❤️ It's a date ❤️
+</h1>
+
+<p id="finalText"></p>
+
+
+<p>
+
+Nath, I know your mom doesn't know me yet,
+and she might not be comfortable with you going out with me.
+
+But that's okay. ❤️
+
+We can figure something out together.
+
+We can think of a way that makes everyone comfortable,
+because I really just want to spend time with you. 😊
+
+</p>
+
+
+<div style="margin-top:25px;">
+
+<img 
+src="hellokitty.gif"
+alt="hello kitty dancing"
+style="width:180px;border-radius:20px;"
+>
+</div>
+
+
+<p style="margin-top:15px;">
+🎀 Hello Kitty approved 🎀
+</p>
+
+
+</div>
+
+</div>
+
+
+<script>
+
+const screens = document.querySelectorAll(".screen");
+
+function show(id){
+    screens.forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+
+// ---------- HEART GAME ----------
+
+let score = 0;
+const goal = 10;
+
+const playArea = document.getElementById("playArea");
+const scoreText = document.getElementById("score");
+
+
+function spawnHeart(){
+
+    const heart = document.createElement("div");
+
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+
+    heart.style.left = Math.random() * 80 + "%";
+    heart.style.top = Math.random() * 80 + "%";
+
+
+    heart.onclick = () => {
+
+        heart.remove();
+
+        score++;
+
+        scoreText.innerHTML = score + " / " + goal;
+
+
+        if(score >= goal){
+
+            show("question");
+
+        } else {
+
+            spawnHeart();
+
+        }
+
+    };
+
+
+    playArea.appendChild(heart);
+
+}
+
+
+window.onload = () => {
+
+    for(let i = 0; i < 3; i++){
+
+        spawnHeart();
+
+    }
+
+};
+
+
+// ---------- YES BUTTON ----------
+
+document.getElementById("yesBtn").onclick=()=>{
+
+    show("yay");
+
+};
+// ---------- NEXT BUTTON ----------
+
+document.getElementById("nextBtn").onclick=()=>{
+
+    show("calendar");
+
+};
+
+
+// ---------- NO BUTTON ----------
+
+const noBtn = document.getElementById("noBtn");
+
+let noClicks = 0;
+
+const noMessages = [
+    "No 🙁",
+    "Are you sure, Nath? 🥺",
+    "Really? 😭",
+    "Think again 🤨",
+    "Pretty please? 🥹",
+    "Last chance 😔",
+    "Catch me 😂"
+];
+
+
+noBtn.onclick = () => {
+
+    noClicks++;
+
+
+    if (noClicks < noMessages.length) {
+
+        noBtn.innerHTML = noMessages[noClicks];
+
+    }
+
+
+    if (noClicks >= 6) {
+
+        noBtn.style.position = "fixed";
+
+
+        const x = Math.random() * (window.innerWidth - 150);
+        const y = Math.random() * (window.innerHeight - 80);
+
+
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+
+    }
+
+};
+
+
+// ---------- DATE PICKER ----------
+
+let chosenDate = "";
+let chosenTime = "";
+
+
+document.getElementById("calendarNext").onclick = () => {
+
+
+    const value = document.getElementById("datePicker").value;
+
+
+    if (!value) {
+
+        alert("Pick a date first, Nath! ❤️");
+        return;
+
+    }
+
+
+    chosenDate = value;
+
+
+    show("time");
+
+};
+
+
+
+// ---------- TIME PICKER ----------
+
+document.getElementById("finish").onclick = () => {
+
+
+    const value = document.getElementById("timePicker").value;
+
+
+    if (!value) {
+
+        alert("Pick a time first! ❤️");
+        return;
+
+    }
+
+
+    chosenTime = value;
+
+
+    const date = new Date(chosenDate);
+
+
+    const formattedDate = date.toLocaleDateString("en-US", {
+
+        month:"long",
+        day:"numeric",
+        year:"numeric"
+
+    });
+
+
+
+    document.getElementById("finalText").innerHTML =
+
+    `See you on <b>${formattedDate}</b> at <b>${chosenTime}</b> 😊`;
+
+
+
+    show("final");
+
+
+};
+
+
+
+// ---------- BACKGROUND FLOATING HEARTS ----------
+
+const bg = document.getElementById("hearts");
+
+
+function createBgHeart(){
+
+
+    const h = document.createElement("div");
+
+
+    h.className = "bgHeart";
+
+
+    h.innerHTML = Math.random() > 0.5 ? "❤️" : "💕";
+
+
+    h.style.left = Math.random() * 100 + "vw";
+
+
+    h.style.fontSize = (20 + Math.random() * 25) + "px";
+
+
+    h.style.animationDuration = (8 + Math.random() * 8) + "s";
+
+
+    bg.appendChild(h);
+
+
+
+    setTimeout(()=>{
+
+        h.remove();
+
+    },16000);
+
+
+}
+
+
+
+setInterval(createBgHeart,500);
+
+
+
+
+// ---------- CONFETTI ----------
+
+function confetti(){
+
+
+    for(let i=0;i<120;i++){
+
+
+        const piece=document.createElement("div");
+
+
+        piece.style.position="fixed";
+        piece.style.left=Math.random()*100+"vw";
+        piece.style.top="-20px";
+        piece.style.width="8px";
+        piece.style.height="12px";
+        piece.style.borderRadius="3px";
+        piece.style.background=`hsl(${Math.random()*360},100%,70%)`;
+        piece.style.pointerEvents="none";
+        piece.style.zIndex="9999";
+        piece.style.transition="transform 3s linear, opacity 3s linear";
+
+
+        document.body.appendChild(piece);
+
+
+
+        requestAnimationFrame(()=>{
+
+
+            piece.style.transform=
+
+            `translateY(${window.innerHeight+100}px) rotate(${Math.random()*1080}deg)`;
+
+
+            piece.style.opacity="0";
+
+
+        });
+
+
+
+        setTimeout(()=>{
+
+            piece.remove();
+
+        },3000);
+
+
+    }
+
+}
+
+
+
+
+document.getElementById("yesBtn").addEventListener("click",()=>{
+
+    confetti();
+
+});
+
+
+
+
+// ---------- HEART POP EFFECT ----------
+
+document.addEventListener("click",e=>{
+
+
+    if(!e.target.classList.contains("heart")) return;
+
+
+
+    const pop=document.createElement("div");
+
+
+    pop.innerHTML="💖";
+
+
+    pop.style.position="fixed";
+    pop.style.left=e.clientX+"px";
+    pop.style.top=e.clientY+"px";
+    pop.style.fontSize="28px";
+    pop.style.pointerEvents="none";
+    pop.style.transition="all .8s ease";
+
+
+    document.body.appendChild(pop);
+
+
+
+    requestAnimationFrame(()=>{
+
+
+        pop.style.transform="translateY(-80px) scale(1.8)";
+        pop.style.opacity="0";
+
+
+    });
+
+
+
+    setTimeout(()=>{
+
+        pop.remove();
+
+    },800);
+
+
+});
+
+
+
+
+// ---------- START HEARTS ----------
+
+for(let i=0;i<20;i++){
+
+
+    setTimeout(createBgHeart,i*300);
+
+
+}
+
+
+
+console.log("❤️ Nath's game loaded ❤️");
+
+
+</script>
+
+</body>
+</html>
